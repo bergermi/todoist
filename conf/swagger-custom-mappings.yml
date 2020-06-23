@@ -1,0 +1,15 @@
+---
+  - type: "java.time.LocalDate"
+    specAsParameter:
+    - type: string
+      format: date
+  - type: "java.time.Instant"
+    specAsParameter:
+    - type: string
+      format: datetime
+  - type: "play.api.libs.json.JsValue"
+    specAsParameter:
+    - type: object
+  - type: BigDecimal
+    specAsParameter:
+    - type: string

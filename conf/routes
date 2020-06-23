@@ -1,0 +1,22 @@
+
+###
+#  summary: Retrieve all to-do items
+#
+#  responses:
+#    200:
+#      description: Returns all to-do items.
+#      schema:
+#        $ref: '#/definitions/domain.api.response.TodosResponse'
+#    500:
+#      description: If an internal error occured
+###
+GET /todos                  controllers.TodoController.getTodos
+
+### NoDocs ###
+GET        /docs            controllers.Assets.at(path:String="/public/lib/swagger", file:String ="index.html")
+
+### NoDocs ###
+GET         /docs/*file     controllers.Assets.at(path:String="/public/lib/swagger", file:String)
+
+### NoDocs ###
+GET        /assets/*file    controllers.Assets.versioned(path="/public", file: Asset)
