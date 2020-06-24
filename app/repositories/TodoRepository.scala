@@ -30,11 +30,21 @@ class TodoRepository extends SQLSyntaxSupport[Todo] {
 
   def getAll(implicit session: DBSession = ReadOnlyAutoSession): Seq[Todo] = {
     withSQL {
-      select.from(this as t)
+      select
+        .from(this as t)
     }.map(this(t)).list.apply()
   }
 
-  def get(id: String)(implicit session: DBSession = ReadOnlyAutoSession): Option[Todo] = ??? // TODO implement
+  def get(id: String)(implicit session: DBSession = ReadOnlyAutoSession): Option[Todo] = {
+    withSQL {
+      select
+        .from(this as t)
+        .where
+        .eq(t.id, id)
+    }.map(this(t)).single.apply()
+
+    // TODO handle exception or use 'first' instead of 'single'?
+  }
 
   def delete(id: String)(implicit session: DBSession = autoSession): Int = ??? // TODO implement
 

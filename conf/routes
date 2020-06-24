@@ -12,6 +12,19 @@
 ###
 GET /todos                  controllers.TodoController.getTodos
 
+###
+#  summary: Retrieve a to-do item by id
+#
+#  responses:
+#    200:
+#      description: Returns a single to-do item for a given id.
+#      schema:
+#        $ref: '#/definitions/domain.api.response.TodoResponse'
+#    500:
+#      description: If an internal error occured
+###
+GET /todos/:id              controllers.TodoController.getTodo(id: String)
+
 ### NoDocs ###
 GET        /docs            controllers.Assets.at(path:String="/public/lib/swagger", file:String ="index.html")
 
