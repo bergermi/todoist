@@ -35,18 +35,21 @@ class TodoRepository extends SQLSyntaxSupport[Todo] {
     }.map(this(t)).list.apply()
   }
 
-  def get(id: String)(implicit session: DBSession = ReadOnlyAutoSession): Option[Todo] = {
+  def get(id: String)(implicit session: DBSession = ReadOnlyAutoSession): Option[Todo] = { // TODO implicit?
     withSQL {
-      select
-        .from(this as t)
-        .where
+      selectFrom(this as t).where // TODO what is 'this' here?
         .eq(t.id, id)
-    }.map(this(t)).single.apply()
+    }.map(this(t)).single.apply() // TODO 'this(t)' argument?
 
     // TODO handle exception or use 'first' instead of 'single'?
   }
 
-  def delete(id: String)(implicit session: DBSession = autoSession): Int = ??? // TODO implement
+  def delete(id: String)(implicit session: DBSession = autoSession): Int = {
+    withSQL {
+      deleteFrom(this as t).where
+        .eq(t.id, id)
+    }.update.apply() // TODO 'this(t)' argument?
+  }
 
   def opt(s: SyntaxProvider[Todo])(rs: WrappedResultSet): Option[Todo] =
     rs.stringOpt(s.resultName.id).map(_ => apply(s.resultName)(rs))

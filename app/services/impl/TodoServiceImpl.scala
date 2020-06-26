@@ -10,5 +10,6 @@ import scala.concurrent.Future
 
 class TodoServiceImpl @Inject() (todoRepository: TodoRepository) extends TodoService {
   override def getAll: Future[Seq[Todo]] = Future(todoRepository.getAll)(Contexts.blocking)
-  override def get(id: String): Future[Option[Todo]] = Future(todoRepository.get(id))(Contexts.blocking)
+  override def get(id: String): Future[Option[Todo]] = Future(todoRepository.get(id))(Contexts.blocking) // TODO context?
+  override def delete(id: String): Future[Int] = Future(todoRepository.delete(id))(Contexts.blocking)
 }
