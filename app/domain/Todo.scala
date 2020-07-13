@@ -8,4 +8,5 @@ case class Todo(id: String, description: String, createdAt: Option[Instant] = No
 
 object Todo {
   implicit val format: OFormat[Todo] = Json.format[Todo]
+
 }
