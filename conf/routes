@@ -1,18 +1,20 @@
 ###
 #  summary: Create a to-do item
-#
-#  parameters:
-#    - in: body
-#      name:
-#      description: The to-do item to create.
-#      schema:
-#        $ref: '#/definitions/domain.TodoContent'
-#  responses:
-#    200:
-#      description: A to-do item was created.
-#    500:
-#      description: If an internal error occured
-###
+####
+##  parameters:
+##    - in: body
+##      name: createTodo
+##      description: The to-do item to create.
+##      required: true
+##      schema:
+##        $ref: '#/definitions/domain.api.request.TodoRequest'
+##  responses:
+##    200:
+##      description: A to-do item was created.
+##      schema:
+##        $ref: '#/definitions/domain.api.response.TodoResponse'
+##    500:
+##      description: If an internal error occured
 POST          /todos               controllers.TodoController.createTodo
 
 ###
@@ -58,7 +60,7 @@ GET           /todos/:id           controllers.TodoController.getTodo(id: String
 #    500:
 #      description: If an internal error occured
 ###
-PUT          /todos               controllers.TodoController.updateTodo
+PUT           /todos/:id           controllers.TodoController.updateTodo(id: String)
 
 ###
 #  summary: Delete a to-do item by id

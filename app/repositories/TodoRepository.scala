@@ -3,7 +3,7 @@ package repositories
 import java.time.Instant
 import java.util.UUID
 
-import domain.{Todo, TodoContent}
+import domain.{CreateTodo, Todo}
 import scalikejdbc._
 import shared.Schema
 
@@ -11,10 +11,10 @@ class TodoRepository extends SQLSyntaxSupport[Todo] {
   override def tableName: String = s"${Schema.Todoist}.todo"
   private val t                  = this.syntax("t")
 
-  def create(todoContent: TodoContent)(implicit session: DBSession = autoSession): Todo = {
+  def create(createTodo: CreateTodo)(implicit session: DBSession = autoSession): Todo = {
     val todo = Todo(
       id = UUID.randomUUID().toString,
-      description = todoContent.description,
+      description = createTodo.description,
       createdAt = Some(Instant.now)
     )
 
@@ -38,34 +38,30 @@ class TodoRepository extends SQLSyntaxSupport[Todo] {
     }.map(this(t)).list.apply()
   }
 
-  def get(id: String)(implicit session: DBSession = ReadOnlyAutoSession): Option[Todo] = { // TODO implicit?
+  def get(id: String)(implicit session: DBSession = ReadOnlyAutoSession): Option[Todo] = {
     withSQL {
       select
         .from(this as t)
-        .where // TODO what is 'this' here?
+        .where
         .eq(t.id, id)
-    }.map(this(t)).single.apply() // TODO 'this(t)' argument?
-
-    // TODO handle exception or use 'first' instead of 'single'?
+    }.map(this(t)).single.apply()
   }
 
-  def update(todo: Todo)(implicit session: DBSession = autoSession): Int = {
-    val createdAt = Instant.now
-
+  def update(id: String, createTodo: CreateTodo)(implicit session: DBSession = autoSession): Int = {
     withSQL {
       scalikejdbc
         .update(this as t)
         .set(
-          column.description -> todo.description,
+          column.description -> createTodo.description
         )
         .where
-        .eq(t.id, todo.id)
+        .eq(t.id, id)
     }.update.apply()
   }
 
-  def delete(id: String)(implicit session: DBSession = autoSession): Int = { // TODO what are the different session types?
+  def delete(id: String)(implicit session: DBSession = autoSession): Int = {
     withSQL {
-      scalikejdbc.delete // TODO or user deleteFrom?
+      scalikejdbc.delete
         .from(this as t)
         .where
         .eq(t.id, id)
