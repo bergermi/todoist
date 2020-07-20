@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+
+  postgres:
+    image: postgres # use the latest official postgres version
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: todoist
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todoist

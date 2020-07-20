@@ -3,7 +3,7 @@ package repositories
 import java.time.Instant
 import java.util.UUID
 
-import domain.{CreateTodo, Todo}
+import domain.{TodoBody, Todo}
 import scalikejdbc._
 import shared.Schema
 
@@ -11,7 +11,7 @@ class TodoRepository extends SQLSyntaxSupport[Todo] {
   override def tableName: String = s"${Schema.Todoist}.todo"
   private val t                  = this.syntax("t")
 
-  def create(createTodo: CreateTodo)(implicit session: DBSession = autoSession): Todo = {
+  def create(createTodo: TodoBody)(implicit session: DBSession = autoSession): Todo = {
     val todo = Todo(
       id = UUID.randomUUID().toString,
       description = createTodo.description,
@@ -47,7 +47,7 @@ class TodoRepository extends SQLSyntaxSupport[Todo] {
     }.map(this(t)).single.apply()
   }
 
-  def update(id: String, createTodo: CreateTodo)(implicit session: DBSession = autoSession): Int = {
+  def update(id: String, createTodo: TodoBody)(implicit session: DBSession = autoSession): Int = {
     withSQL {
       scalikejdbc
         .update(this as t)

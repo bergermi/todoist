@@ -1,7 +1,7 @@
 package controllers
 
 import com.google.inject.Inject
-import domain.{CreateTodo, Todo}
+import domain.{TodoBody, Todo}
 import domain.api.request.TodoRequest
 import domain.api.response.{TodoResponse, TodosResponse}
 import javax.inject.Singleton
@@ -25,7 +25,7 @@ class TodoController @Inject() (cc: ControllerComponents, todoService: TodoServi
     json match {
       case Some(value) =>
         value
-          .validate[CreateTodo]
+          .validate[TodoBody]
           .fold(
             errors => Future.successful(BadRequest(Json.obj("message" -> JsError.toJson(errors)))),
             createTodo => {
@@ -44,7 +44,7 @@ class TodoController @Inject() (cc: ControllerComponents, todoService: TodoServi
 
   def getTodos: Action[AnyContent] = Action.async { implicit request =>
     todoService.getAll map { todos =>
-      Ok(Json.toJson(TodosResponse(todos = todos))) // TODO explanation?
+      Ok(Json.toJson(TodosResponse(todos = todos)))
     } recover {
       case NonFatal(e) =>
         logger.error("An error occurred while fetching todos", e)
@@ -53,9 +53,9 @@ class TodoController @Inject() (cc: ControllerComponents, todoService: TodoServi
   }
 
   def getTodo(id: String): Action[AnyContent] = Action.async { implicit request =>
-    todoService.get(id) map { todo =>            // TODO what does map exactly do here?
-      Ok(Json.toJson(TodoResponse(todo = todo))) // TODO explanation?
-    } recover {                                  // TODO recover?
+    todoService.get(id) map { todo =>
+      Ok(Json.toJson(TodoResponse(todo = todo)))
+    } recover {
       case NonFatal(e) =>
         logger.error(s"An error occurred while fetching todo with id = '$id'", e)
         InternalServerError(e.getMessage)
@@ -68,7 +68,7 @@ class TodoController @Inject() (cc: ControllerComponents, todoService: TodoServi
     json match {
       case Some(value) =>
         value
-          .validate[CreateTodo]
+          .validate[TodoBody]
           .fold(
             errors => Future.successful(BadRequest(Json.obj("message" -> JsError.toJson(errors)))),
             createTodo => {
@@ -77,7 +77,7 @@ class TodoController @Inject() (cc: ControllerComponents, todoService: TodoServi
                 else NotFound
               } recover {
                 case NonFatal(e) =>
-                  logger.error(s"An error occurred while updating todo with id = '${id}'", e)
+                  logger.error(s"An error occurred while updating todo with id = '$id'", e)
                   InternalServerError(e.getMessage)
               }
             }

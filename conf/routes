@@ -1,20 +1,19 @@
 ###
 #  summary: Create a to-do item
-####
-##  parameters:
-##    - in: body
-##      name: createTodo
-##      description: The to-do item to create.
-##      required: true
-##      schema:
-##        $ref: '#/definitions/domain.api.request.TodoRequest'
-##  responses:
-##    200:
-##      description: A to-do item was created.
-##      schema:
-##        $ref: '#/definitions/domain.api.response.TodoResponse'
-##    500:
-##      description: If an internal error occured
+#
+#  parameters:
+#    - in: body
+#      description: The body of the to-do item to create.
+#      schema:
+#        $ref: '#/definitions/domain.TodoBody'
+#  responses:
+#    200:
+#      description: Returns the created to-do item.
+#      schema:
+#        $ref: '#/definitions/domain.api.response.TodoResponse'
+#    500:
+#      description: If an internal error occured
+###
 POST          /todos               controllers.TodoController.createTodo
 
 ###
@@ -48,13 +47,12 @@ GET           /todos/:id           controllers.TodoController.getTodo(id: String
 #
 #  parameters:
 #    - in: body
-#      name: todo
-#      description: The to-do item to update.
+#      description: The body of the to-do item to update.
 #      schema:
-#        $ref: '#/definitions/domain.api.response.TodoResponse'
+#        $ref: '#/definitions/domain.TodoBody'
 #  responses:
 #    200:
-#      description: A to-do item was updated.
+#      description: The to-do item was updated.
 #    404:
 #      description: The specified item does not exist.
 #    500:
